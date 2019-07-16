@@ -1,0 +1,21 @@
+INDEX VERSION 1.131+C:\Users\Seiya\Documents\dev_lite\workspace_eclipse\.metadata\.plugins\org.eclipse.jdt.core
+2312920552.index
+1623193821.index
+3561748020.index
+2942477056.index
+377135740.index
+2383153495.index
+1712346867.index
+397985867.index
+4279830345.index
+4275793278.index
+1741831364.index
+1963614177.index
+1773413456.index
+2394003953.index
+2328269416.index
+781409043.index
+1635619562.index
+4189497703.index
+368945328.index
+2283681759.index

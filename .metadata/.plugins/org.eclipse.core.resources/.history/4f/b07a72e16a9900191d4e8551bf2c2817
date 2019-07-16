@@ -1,0 +1,34 @@
+import javafx.application.*;
+import javafx.stage.*;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.geometry.*;
+
+public class Sample1 extends Application{
+	private Button[] bt = new Button[5];
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+	public void start(Stage stage) throws Exception{
+		bt[0] = new Button("TopRight");
+		bt[1] = new Button("ButtomLeft");
+		bt[2] = new Button("Center");
+		bt[3] = new Button("LeftTop");
+		bt[4] = new Button("BottomRight");
+		
+		BorderPane bp = new BorderPane();
+		
+		
+		
+		Scene sc = new Scene(bp, 300, 200);
+		
+		stage.setScene(sc);
+		
+		stage.setTitle("ƒTƒ“ƒvƒ‹");
+		stage.show();
+		
+	}
+}

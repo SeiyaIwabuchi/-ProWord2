@@ -1,0 +1,79 @@
+import javafx.application.*;
+import javafx.stage.*;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.input.*;
+import javafx.event.*;
+import javafx.scene.image.*;
+import java.util.Queue;
+import java.util.ArrayDeque;
+
+public class Sample6 extends Application{
+	private Label lb = new Label("いらっしゃいませ。");
+	private Button bt[] = new Button[5];
+	private ToolBar tb = new ToolBar();
+	private Image im = new Image(getClass().getResourceAsStream("car.jpg"));
+	
+	public static void main(String[] args) {
+		launch();
+	}
+	@Override
+	public void start(Stage stage) throws Exception {
+		// TODO Auto-generated method stub
+		for(int i=0;i<bt.length;i++) {
+			bt[i] = new Button();
+			bt[i].setGraphic(new ImageView(im));
+		}
+		
+		for(int i=0;i<bt.length;i++) {
+			bt[i].setTooltip(new Tooltip((i+1) + "号車"));
+		}
+		
+		int sep = 2;
+		int add=0;
+		for(int i=0;i<bt.length+add;i++) {
+			Node nd = bt[i-add];
+			if(i == sep) {
+				nd = new Separator();
+				add++;
+			}
+			tb.getItems().add(nd);
+		}
+		
+		BorderPane bp = new BorderPane();
+		
+		bp.setTop(tb);
+		bp.setCenter(lb);
+		
+		Queue<Integer> oldData = new ArrayDeque<>();
+		for(Button tbt : bt) {
+			tbt.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					int num;
+					for(num=0;num<bt.length;num++) {
+						if(event.getSource() == bt[num]) {
+							break;
+						}
+					}
+					oldData.poll();
+					oldData.add(num);
+					String old1 = oldData.peek() instanceof Integer? oldData.poll().toString() : null ;
+					String old2 = oldData.peek() instanceof Integer? oldData.poll().toString() : null ;
+					String old3 = oldData.peek() instanceof Integer? oldData.poll().toString() : null ;
+					oldData.add(Integer.parseInt(old1));
+					oldData.add(Integer.parseInt(old2));
+					oldData.add(Integer.parseInt(old3));
+					lb.setText((old1 != null?old1 + "と":"") + (old2 != null?old2 + "と":"") + (old3 != null?old3 + "と":"") + "号車ですね。");
+				}
+			});
+		}
+		
+		Scene sc = new Scene(bp,300,200);
+		stage.setScene(sc);
+		stage.setTitle("サンプル");
+		stage.show();
+	}
+}
