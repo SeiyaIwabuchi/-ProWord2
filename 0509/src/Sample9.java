@@ -40,7 +40,6 @@ public class Sample9 extends Application{
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				Share.gc.clearRect(0, 0, 300, 200);
 				Common.rePaint();
 			}
 		});
@@ -67,9 +66,11 @@ public class Sample9 extends Application{
 class Th extends Thread{
 	public void run() {
 		try {
-			while(Share.cb.isSelected()) {
-				Common.rePaint();
-				Thread.sleep(new Long(3000));
+			while(1==1) {
+				if(Share.cb.isSelected()) {
+					Common.rePaint();
+				}
+				Thread.sleep(new Long(100));
 			}
 		}catch(Exception e) {
 			System.out.println("Except");
@@ -79,6 +80,7 @@ class Th extends Thread{
 
 class Common{
 	static void rePaint() {
+		Share.gc.clearRect(0, 0, 300, 200);
 		for(int i=0;i<100;i++) {
 			int r = (int)(Math.random() * 256);
 			int g = (int)(Math.random() * 256);

@@ -12,11 +12,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Sample6 extends Application {
+	
+	final private int oldNum = 5;
+	final private int buttonNum = 10;
+	
 	private Label lb = new Label("いらっしゃいませ。");
-	private Button bt[] = new Button[5];
+	private Button bt[] = new Button[buttonNum]; 
 	private ToolBar tb = new ToolBar();
 	private Image im = new Image(getClass().getResourceAsStream("car.jpg"));
-
+	
 	public static void main(String[] args) {
 		launch();
 	}
@@ -33,11 +37,11 @@ public class Sample6 extends Application {
 			bt[i].setTooltip(new Tooltip((i + 1) + "号車"));
 		}
 
-		int sep = 2;
+		int sep = 5;
 		int add = 0;
 		for (int i = 0; i < bt.length + add; i++) {
 			Node nd = bt[i - add];
-			if (i == sep) {
+			if ((i - add) % sep == 0 && i != 0) {
 				nd = new Separator();
 				add++;
 			}
@@ -50,7 +54,7 @@ public class Sample6 extends Application {
 		bp.setCenter(lb);
 
 		Queue<Integer> oldData = new ArrayDeque<>();
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < oldNum; i++)
 			oldData.add(-1);
 		for (Button tbt : bt) {
 			tbt.setOnAction(new EventHandler<ActionEvent>() {
@@ -68,12 +72,13 @@ public class Sample6 extends Application {
 						oldData.add(num);
 					}
 					ArrayList<Integer> al = new ArrayList<>();
+					/*al.add(oldData.poll());
 					al.add(oldData.poll());
-					al.add(oldData.poll());
-					al.add(oldData.poll());
-					oldData.add(al.get(0));
-					oldData.add(al.get(1));
-					oldData.add(al.get(2));
+					al.add(oldData.poll());*/
+					for(int i=0;i<oldNum;i++) al.add(oldData.poll());
+					for(int i=0;i<oldNum;i++) {
+						oldData.add(al.get(i));
+					}
 					al.sort(new Comparator<Integer>() {
 						@Override
 						public int compare(Integer o1, Integer o2) {
@@ -86,8 +91,15 @@ public class Sample6 extends Application {
 								return 0;
 						}
 					});
-					lb.setText((al.get(0) != -1 ? al.get(0) + "と" : "") + (al.get(1) != -1 ? al.get(1) + "と" : "")
-							+ (al.get(2) != -1 ? al.get(2) : "") + "号車ですね。");
+					//lb.setText((al.get(0) != -1 ? al.get(0) + "と" : "") + (al.get(1) != -1 ? al.get(1) + "と" : "")
+					//		+ (al.get(2) != -1 ? al.get(2) : "") + "号車ですね。");
+					String lbText = "";
+					int iyu = 0;
+					for(iyu=0;iyu<oldNum-1;iyu++) {
+						lbText += (al.get(iyu) != -1 ? al.get(iyu) + "と" : "");
+					}
+					lbText += (al.get(iyu) != -1 ? al.get(iyu) : "") + "号車ですね。";
+					lb.setText(lbText);
 					al.clear();
 				}
 			});
