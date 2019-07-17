@@ -247,6 +247,25 @@
 <entry path="D:\dev_lite\jdk1.8.0_212\jre\lib\endorsed"/>
 </endorsedDirs>
 </libraryInfo>
+<libraryInfo home="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre" version="1.8.0_212">
+<bootpath>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\resources.jar"/>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\rt.jar"/>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\sunrsasign.jar"/>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\jsse.jar"/>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\jce.jar"/>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\charsets.jar"/>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\jfr.jar"/>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\ext"/>
+<entry path="C:\windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="C:\Users\Seiya\Documents\dev_lite\jdk1.8.0_212\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
 <libraryInfo home="C:\Users\180453\Desktop\dev_lite\jdk1.8.0_212\jre" version="1.8.0_212">
 <bootpath>
 <entry path="C:\Users\180453\Desktop\dev_lite\jdk1.8.0_212\jre\lib\resources.jar"/>

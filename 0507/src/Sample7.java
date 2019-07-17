@@ -7,14 +7,12 @@ import javafx.scene.input.*;
 import javafx.event.*;
 
 public class Sample7 extends Application{
-
 	private Label lb = new Label("‚¢‚ç‚Á‚µ‚á‚¢‚Ü‚¹B");
 	private Button bt = new Button("w“ü");
 	private Boolean bl = true;
 	public static void main(String[] args) {
 		launch();
 	}
-	
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
@@ -48,5 +46,4 @@ public class Sample7 extends Application{
 		stage.setTitle("ƒTƒ“ƒvƒ‹");
 		stage.show();
 	}
-
 }
