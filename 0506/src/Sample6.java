@@ -37,11 +37,11 @@ public class Sample6 extends Application {
 			bt[i].setTooltip(new Tooltip((i + 1) + "†Ô"));
 		}
 
-		int sep = 5;
+		int sep = 2;
 		int add = 0;
 		for (int i = 0; i < bt.length + add; i++) {
 			Node nd = bt[i - add];
-			if ((i - add) % sep == 0 && i != 0) {
+			if (i == sep) {
 				nd = new Separator();
 				add++;
 			}
