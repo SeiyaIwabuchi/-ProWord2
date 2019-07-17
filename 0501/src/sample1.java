@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 import javafx.application.*;
 import javafx.stage.*;
 import javafx.scene.*;
@@ -22,7 +25,17 @@ public class sample1 extends Application{
 		cb2 = new ComboBox<String>();
 		
 		//コントロールの設定
-		ObservableList<String> ol = FXCollections.observableArrayList("","トラック","オープンカー","タクシー","スポーツカー","ミニカー");
+		Set<String> set = new HashSet<String>() {
+			{
+				add("");
+				add("トラック");
+				add("オープンカー");
+				add("タクシー");
+				add("スポーツカー");
+				add("ミニカー");
+			}
+		};
+		ObservableList<String> ol = FXCollections.observableArrayList(set);
 		cb1.setItems(ol);
 		cb2.setItems(ol);
 		
