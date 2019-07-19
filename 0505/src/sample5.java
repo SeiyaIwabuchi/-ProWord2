@@ -7,7 +7,7 @@ import javafx.scene.input.*;
 
 import javafx.event.*;
 
-public class Sample5 extends Application {
+public class sample5 extends Application {
 	private Label lb;
 	private MenuBar mb;
 	private Menu[] mn = new Menu[7];
