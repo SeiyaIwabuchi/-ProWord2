@@ -13,7 +13,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.beans.value.*; 
 import javafx.beans.property.*;
-public class Sample3 extends Application{
+public class sample3 extends Application{
 	private Label lb;
 	private TableView<RowData> tv;
 	private Button dlBt;
