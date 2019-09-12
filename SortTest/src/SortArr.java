@@ -1,3 +1,4 @@
+import java.io.EOFException;
 import java.util.ArrayList; 
 import java.util.Collections; 
 
@@ -57,6 +58,8 @@ class PersonComparator implements java.util.Comparator<Person> {
 			else if(o1.getWeight() < o2.getWeight()) compNum = -1;
 		}else if(o1.getAge() < o2.getAge()) compNum = -1;
 		else if(o1.getAge() > o2.getAge()) compNum = 1;
+		
 		return compNum * (isDesc?-1:1);
 	}
+	
 }
