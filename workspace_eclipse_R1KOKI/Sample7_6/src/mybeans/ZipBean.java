@@ -3,9 +3,12 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.lang.StringBuilder;
-import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.jackson.*;
 
 
 public class ZipBean implements Serializable {
@@ -45,15 +48,13 @@ public class ZipBean implements Serializable {
 				output.append(line);
 			}
 			rawJson = output.toString();
-			System.out.println(rawJson);
+			System.out.println("rawjson" + rawJson);
 			
-			JSONObject obj = new JSONObject(rawJson);
-			Map<String, Object> map = new HashMap<>();
-	        for(Object key : obj.keySet()) {
-	            map.put((String) key, obj.get((String) key));
-	        }
-	        System.out.println(map);
-			return "asdasdsa";
+			ObjectMapper mapper = new ObjectMapper();
+	        Model model = mapper.readValue(rawJson, Model.class);
+	        address = model.results.get(0).address1 + model.results.get(0).address2 + model.results.get(0).address3;
+	        System.out.println(address);
+			return address;
 		}
 		catch(IOException e) {
 			rawJson = "error";
