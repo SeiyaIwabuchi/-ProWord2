@@ -70,6 +70,9 @@ public class Sample8_1_Console
 	        		case "DROP":
 	        			st.execute(str);
 	        			break;
+	        		case "exit":
+	        			System.out.println("Bye.");
+	        			return;
 	        		default:
 	        			System.out.println("Undefined instruction" + splitedStr[0]);
 	        			break;
