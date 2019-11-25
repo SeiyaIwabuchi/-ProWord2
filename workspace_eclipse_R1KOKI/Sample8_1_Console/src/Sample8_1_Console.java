@@ -27,7 +27,6 @@ public class Sample8_1_Console
 
              //–â‚¢‡‚í‚¹‚Ì€”õ
              DatabaseMetaData dm = cn.getMetaData();
-             ResultSet tb = dm.getTables(null, null, "Ô•\", null);
              ResultSet rs;
 
              Statement st = cn.createStatement();
