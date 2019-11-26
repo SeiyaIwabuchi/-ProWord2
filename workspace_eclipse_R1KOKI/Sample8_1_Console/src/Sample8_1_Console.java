@@ -12,7 +12,7 @@ public class Sample8_1_Console
 {
    public static void main(String args[])
    {
-	   System.out.println("JDBCƒRƒ“ƒ\[ƒ‹");
+	   System.out.println("JDBC");
 	   try{
          //Ú‘±‚Ì€”õ
          String url = "jdbc:derby:cardb;create=true";
