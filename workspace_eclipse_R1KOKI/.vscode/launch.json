@@ -4,13 +4,5 @@
     // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - Sample4",
-            "request": "launch",
-            "mainClass": "Sample4",
-            "projectName": "Sample8_4",
-            "args": "-m d -w クラス='TE3A'"
-        }
     ]
 }

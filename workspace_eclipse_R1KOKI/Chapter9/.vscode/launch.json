@@ -6,11 +6,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - Sample4",
+            "name": "CodeLens (Launch) - Sample1",
             "request": "launch",
-            "mainClass": "Sample4",
-            "projectName": "Sample8_4",
-            "args": "-m d -w クラス='TE3A'"
+            "mainClass": "sample1.Sample1",
+            "projectName": "Chapter9",
+            "args": ".//src//app//App.java"
         }
     ]
 }

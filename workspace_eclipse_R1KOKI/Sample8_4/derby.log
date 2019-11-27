@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Tue Nov 26 13:32:55 JST 2019:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-016e-a5fb-d482-00000eb3f008 
-on database directory C:\Users\180453\Desktop\dev_lite\workspace_eclipse\workspace_eclipse_R1KOKI\Sample8_4\cardb with class loader sun.misc.Launcher$ExtClassLoader@1c6b6478 
+Wed Nov 27 13:31:08 JST 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-016e-ab20-8ece-00000eb37500 
+on database directory C:\Users\180453\Desktop\dev_lite\workspace_eclipse\workspace_eclipse_R1KOKI\Sample8_4\cardb with class loader sun.misc.Launcher$ExtClassLoader@67f89fa3 
 Loaded from file:/C:/Users/180453/Desktop/dev_lite/jdk1.8.0_212/jre/lib/ext/derby.jar
 java.vendor=Amazon.com Inc.
 java.runtime.version=1.8.0_212-b04

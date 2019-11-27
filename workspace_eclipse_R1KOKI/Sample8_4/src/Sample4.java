@@ -4,9 +4,24 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+
+import javax.xml.crypto.Data;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+class DataTypes{
+    static String varchar(int n){
+        return String.format("varchar(%d)", n);
+    }
+    static String Int(){
+        return "int";
+    }
+    static String Float(){
+        return "float";
+    }
+}
 
 public class Sample4 {
     static String[] modeArgs = {};
@@ -20,7 +35,19 @@ public class Sample4 {
          * -d :modeがdの時は(列名=データ)の繰り返し。区切りにスペースを使う。modeがiの時はデータの繰り返し。区切りにスペースを使う。modeがuの時は(列名=データ)の繰り返し。区切りにスペースを使う。 
          * -w : 条件が必要なmodeで指定する。必要のないときは無視される。
          */
-        String createTBqry = "CREATE TABLE 学生表(" + "クラス varchar(4)," + "ＮＯ int," + "学生名 varchar(20)," + "出身県 varchar(12))";
+        String[][] defineColumn = {
+            {"クラス",DataTypes.varchar(4)},
+            {"ＮＯ",DataTypes.Int()},
+            {"学生名",DataTypes.varchar(20)},
+            {"出身県",DataTypes.varchar(12)},
+            {"テスト平均点",DataTypes.Float()}
+        };
+        String columnQrys = "";
+        for (int idx=0;idx<defineColumn.length;idx++){
+            columnQrys += defineColumn[idx][0] + " " + defineColumn[idx][1];
+            if(idx != defineColumn.length-1) columnQrys += ",";
+        }
+        String createTBqry = String.format("CREATE TABLE 学生表(%s)",columnQrys);
         String insrtQry = "INSERT INTO %s VALUES(%s)";
         String updtQry = "UPDATE %s SET %s WHERE %s";
         String dltQry = "DELETE FROM %s WHERE %s";
@@ -41,6 +68,18 @@ public class Sample4 {
                 ResultSet rs = st.executeQuery("SELECT * FROM 学生表");
                 ResultSetMetaData rm = rs.getMetaData();
                 int cnum = rm.getColumnCount();
+                while (rs.next()) {
+                    for (int i = 1; i <= cnum; i++) {
+                        System.out.print(rm.getColumnName(i) + ":" + rs.getObject(i) + "  ");
+                    }
+                    System.out.println("");
+                }
+                //現在のレコード数を表示する
+                System.out.println("--------------------------------------------------");
+                System.out.println("SELECT COUNT(*) \"レコード数\" FROM 学生表");
+                rs = st.executeQuery("SELECT COUNT(*) \"レコード数\" FROM 学生表");
+                rm = rs.getMetaData();
+                cnum = rm.getColumnCount();
                 while (rs.next()) {
                     for (int i = 1; i <= cnum; i++) {
                         System.out.print(rm.getColumnName(i) + ":" + rs.getObject(i) + "  ");
@@ -69,10 +108,15 @@ public class Sample4 {
                     case "i":
                         String insrtTok = "";
                         for (int idx=1;idx<dataArgs.length;idx++){
+                            //int型、double型にパースできないなら文字列としてシングルで囲う
                             try{
                                 Integer.parseInt(dataArgs[idx]);
                             }catch(NumberFormatException nfe){
-                                dataArgs[idx] = "'" + dataArgs[idx] + "'";
+                                try{
+                                    Double.parseDouble(dataArgs[idx]);
+                                }catch(NumberFormatException nfe2){
+                                    dataArgs[idx] = "'" + dataArgs[idx] + "'";
+                                }
                             }
                             insrtTok += dataArgs[idx];
                             if (idx != dataArgs.length-1) insrtTok += ",";
@@ -133,8 +177,8 @@ public class Sample4 {
         String swichChar = "";
         boolean ret = true;
         for (String tok : args){
-            System.out.println("tok:" + tok);
-            System.out.println("swichChar:" + swichChar);
+            //System.out.println("tok:" + tok);
+            //System.out.println("swichChar:" + swichChar);
             switch(tok){
                 case "-m":
                     swichChar = "m";
