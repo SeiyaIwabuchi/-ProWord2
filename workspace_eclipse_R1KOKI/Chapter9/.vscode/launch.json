@@ -6,11 +6,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - Sample1",
+            "name": "CodeLens (Launch) - Sample2",
             "request": "launch",
-            "mainClass": "sample1.Sample1",
+            "mainClass": "sample2.Sample2",
             "projectName": "Chapter9",
-            "args": ".//src//app//App.java"
+            "args": "./file1.txt ./file2.txt"
         }
     ]
 }
