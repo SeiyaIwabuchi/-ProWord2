@@ -8,9 +8,8 @@
             "type": "java",
             "name": "CodeLens (Launch) - Sample2",
             "request": "launch",
-            "mainClass": "sample2.Sample2",
-            "projectName": "Chapter9",
-            "args": "./file1.txt ./file2.txt"
+            "mainClass": "sample4.Sample4",
+            "projectName": "Chapter9"
         }
     ]
 }
