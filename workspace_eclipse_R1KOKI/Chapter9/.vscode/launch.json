@@ -8,7 +8,7 @@
             "type": "java",
             "name": "CodeLens (Launch) - Sample2",
             "request": "launch",
-            "mainClass": "sample4.Sample4",
+            "mainClass": "sample5.Sample5",
             "projectName": "Chapter9"
         }
     ]
