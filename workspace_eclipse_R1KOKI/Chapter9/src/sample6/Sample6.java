@@ -1,19 +1,18 @@
 package sample6;
 import java.io.*;
+import java.util.Observable;
 import java.util.regex.*;
 import javafx.application.*;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
+import javafx.scene.text.*;
 import javafx.scene.input.*;
 import javafx.event.*;
-import javafx.scene.text.TextFlow;
-import javax.swing.text.DefaultEditorKit;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
+
+import javafx.collections.*;
+
 import java.awt.Color;
 
 public class Sample6 extends Application {
@@ -21,8 +20,9 @@ public class Sample6 extends Application {
     private TextArea ta;
     private TextField tf;
     private Button bt1, bt2;
-    private Matcher mt;
+    private Matcher matcher;
     private TextFlow textFlow;
+    private Text text;
     BorderPane bp = new BorderPane();
     HBox hb = new HBox();
 
@@ -37,7 +37,6 @@ public class Sample6 extends Application {
         tf = new TextField();
         bt1 = new Button("検索");
         bt2 = new Button("解除");
-        textFlow = new TextFlow();
         // ペインの作成
         
         // ペインへの追加
@@ -65,30 +64,53 @@ public class Sample6 extends Application {
     // イベントハンドラクラス
     class SampleEventHandler implements EventHandler<ActionEvent> {
         public void handle(ActionEvent e) {
-            Text text =  new Text(ta.getText());
-            //ta.setText(text);
             try {
                 if (e.getSource() == bt1) {
-                    textFlow.getChildren().add(text);
-                    bp.setCenter(textFlow);
-                    SimpleAttributeSet set = new SimpleAttributeSet();
-                    StyleConstants.setBold(set, true);
-                    StyleConstants.setBackground(set, Color.WHITE);
-                    StyleConstants.setForeground(set, Color.RED);
-                    DefaultStyledDocument document = (DefaultStyledDocument) bp.getDocument();
-                    document.putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
                     Pattern pn = Pattern.compile(tf.getText());
-                    mt = pn.matcher(ta.getText());
-                    if (mt.find() != false) {
-                        ta.selectRange(mt.start(), mt.end());
-                    } else {
-                        ta.home();
+                    matcher = pn.matcher(ta.getText());
+                    int start,end,pos = 0;
+                    String sourceText = ta.getText();
+                    textFlow = new TextFlow();
+                    while (matcher.find()) {
+                        start = matcher.start();
+                        end = matcher.end();
+                        if (start == 0) {
+                            text = new Text(sourceText.substring(start, end));
+                            text.setStyle("-fx-font-size: 20px;-fx-fill: crimson;");
+                            textFlow.getChildren().add(text);
+                            pos = end;
+                        }else{
+                            if (pos != start) {
+                                text = new Text(sourceText.substring(pos, start));
+                                text.setStyle("-fx-font-size: 16px;");
+                                textFlow.getChildren().add(text);
+                            }
+                            text = new Text(sourceText.substring(start, end));
+                            text.setStyle("-fx-font-size: 20px;-fx-fill: crimson;");
+                            textFlow.getChildren().add(text);
+                            pos = end;
+                        }
                     }
+                    if (pos < sourceText.length()) {
+                        text = new Text(sourceText.substring(pos, sourceText.length()));
+                        text.setStyle("-fx-font-size: 16px;");
+                        textFlow.getChildren().add(text);
+                    }
+                    bp.setCenter(textFlow);
                 } else if (e.getSource() == bt2) {
-                    
-                    if (mt.find() != false && mt.pattern().pattern().equals(tf.getText())) {
-                        ta.selectRange(mt.start(), mt.end());
+                    try{
+                        /*
+                        これだと編集した後に解除を押すと編集前に戻ってしまう。
+                        String tmpstr = "";
+                        for(Node t:textFlow.getChildren()){
+                            Text t2 = (Text)t;
+                            tmpstr += t2.getText();
+                        }*/
+                        ta.setText(ta.getText());
+                    }catch(NullPointerException npe){
+                        ta.setText("");
                     }
+                    bp.setCenter(ta);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
