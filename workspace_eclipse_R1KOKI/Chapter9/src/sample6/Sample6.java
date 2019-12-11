@@ -75,22 +75,28 @@ public class Sample6 extends Application {
                         start = matcher.start();
                         end = matcher.end();
                         if (start == 0) {
+                            //頭に対象文字列があったとき
                             text = new Text(sourceText.substring(start, end));
                             text.setStyle("-fx-font-size: 20px;-fx-fill: crimson;");
                             textFlow.getChildren().add(text);
+                            //コピーところまでカーソル移動（的な意味合い）
                             pos = end;
                         }else{
                             if (pos != start) {
+                                //カーソルがスタートの位置ではないとき（今のカーソル位置から対象文字列が前にある時）
                                 text = new Text(sourceText.substring(pos, start));
                                 text.setStyle("-fx-font-size: 16px;");
                                 textFlow.getChildren().add(text);
+                                //ここまでで対象外のコピー
                             }
+                            //ここから対象のコピー
                             text = new Text(sourceText.substring(start, end));
                             text.setStyle("-fx-font-size: 20px;-fx-fill: crimson;");
                             textFlow.getChildren().add(text);
                             pos = end;
                         }
                     }
+                    //残ったテキストをコピー
                     if (pos < sourceText.length()) {
                         text = new Text(sourceText.substring(pos, sourceText.length()));
                         text.setStyle("-fx-font-size: 16px;");
