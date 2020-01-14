@@ -6,6 +6,36 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Sample5",
+            "request": "launch",
+            "mainClass": "sample5.Sample5",
+            "projectName": "Chapter9"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Sample4",
+            "request": "launch",
+            "mainClass": "sample4.Sample4",
+            "projectName": "Chapter9"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Sample2",
+            "request": "launch",
+            "mainClass": "sample2.Sample2",
+            "projectName": "Chapter9",
+            "args": "./file1.txt ./file2.txt"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Sample1",
+            "request": "launch",
+            "mainClass": "sample1.Sample1",
+            "projectName": "Chapter9",
+            "args": "./file1.txt"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Sample3",
             "request": "launch",
             "mainClass": "sample3.Sample3",

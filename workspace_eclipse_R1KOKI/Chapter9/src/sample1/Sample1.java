@@ -15,7 +15,7 @@ public class Sample1{
                 println("ファイルが見つかりません");
             }else{
                 println("絶対パス:" + fl.getAbsolutePath());
-                println("ファイルサイズ:" + fl.length());
+                println("ファイルサイズ:" + fl.length() + "バイト");
             }
         }catch(Exception e){
             e.printStackTrace();

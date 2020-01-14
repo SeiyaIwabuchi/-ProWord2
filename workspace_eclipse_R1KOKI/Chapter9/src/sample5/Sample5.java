@@ -68,7 +68,9 @@ public class Sample5 extends Application {
         public void handle(ActionEvent e) {
             Pattern pn = Pattern.compile(tf1.getText());
             Matcher mt = pn.matcher(ta.getText());
-            historyList.add(ta.getText());
+            if(mt.find()){
+                historyList.add(ta.getText());
+            }
             ta.setText(mt.replaceAll(tf2.getText()));
         }
     }
