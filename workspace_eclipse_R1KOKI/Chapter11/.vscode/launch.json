@@ -1,0 +1,42 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Sample5C",
+            "request": "launch",
+            "mainClass": "sample5C.Sample5C",
+            "projectName": "Chapter11"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Sample5S",
+            "request": "launch",
+            "mainClass": "sample5S.Sample5S",
+            "projectName": "Chapter11"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-App<Chapter11>",
+            "request": "launch",
+            "mainClass": "app.App",
+            "projectName": "Chapter11"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Sample3<Chapter11>",
+            "request": "launch",
+            "mainClass": "sample3.Sample3",
+            "projectName": "Chapter11"
+        }
+    ]
+}
