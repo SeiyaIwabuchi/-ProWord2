@@ -125,6 +125,11 @@ public class Sample1 extends Application {
                                 controls[i-1][j-1] = new Button();
                                 controls[i-1][j+1] = new Button();
                                 controls[i+1][j-1] = new Button();
+                                for (int i_ = i-1; i_ <= i+1; i++) {
+                                    for (int j_ = j-1; j <=j+1 ; j++) {
+                                        hogehoge();
+                                    }
+                                }
                             }else if(tmplb.getText() == "   〇   " && !player){
                                 controls[i+1][j] = new Button();
                                 controls[i-1][j] = new Button();
