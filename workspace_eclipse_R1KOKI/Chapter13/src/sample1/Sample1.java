@@ -81,6 +81,33 @@ public class Sample1 extends Application {
         }
         return new int[1];
     }
+
+    public void setNextButton(int i,int j){
+        for (int i_ = i-1; i_ <= i+1; i_++) {
+            for (int j_ = j-1; j_ <=j+1 ; j_++) {
+                if(i_!=i && j_!=j){
+                    if(controls[i_][j_] instanceof Label){
+                        Label tmplb2 = (Label)controls[i_][j_];
+                        if(tmplb2.getText() != "   ●   " && tmplb2.getText() != "   〇   "){
+                            controls[i_][j_] = new Button(Integer.toString(i) + Integer.toString(j));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void removeButton(){
+        for (int i = 0; i <controls.length ; i++) {
+            for (int j = 0; j <controls[i].length ; j++) {
+                if(j != Rows-1){
+                    if(controls[i][j] instanceof Button){
+                        controls[i][j] = new Label("   " + Integer.toString(i) + Integer.toString(j) + "   ");
+                        controls[i][j].setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                    }
+                }
+            }
+        }
+    }
     public void refresh(){
         GridPane pane = new GridPane();
         for (int i = 0; i <controls.length ; i++) {
@@ -111,34 +138,16 @@ public class Sample1 extends Application {
             player = !player;
             controls[contIndex[0]][contIndex[1]] = new Label(mark);
             controls[contIndex[0]][contIndex[1]].setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            removeButton();
             for (int i = 0; i <controls.length ; i++) {
                 for (int j = 0; j <controls[i].length ; j++) {
                     if(controls[i][j] != null && controls[i][j] instanceof Label){
                         Label tmplb = (Label)controls[i][j];
                         try{
                             if(tmplb.getText() == "   ●   " && player){
-                                controls[i+1][j] = new Button();
-                                controls[i-1][j] = new Button();
-                                controls[i][j+1] = new Button();
-                                controls[i][j-1] = new Button();
-                                controls[i+1][j+1] = new Button();
-                                controls[i-1][j-1] = new Button();
-                                controls[i-1][j+1] = new Button();
-                                controls[i+1][j-1] = new Button();
-                                for (int i_ = i-1; i_ <= i+1; i++) {
-                                    for (int j_ = j-1; j <=j+1 ; j++) {
-                                        hogehoge();
-                                    }
-                                }
+                                setNextButton(i, j);
                             }else if(tmplb.getText() == "   〇   " && !player){
-                                controls[i+1][j] = new Button();
-                                controls[i-1][j] = new Button();
-                                controls[i][j+1] = new Button();
-                                controls[i][j-1] = new Button();
-                                controls[i+1][j+1] = new Button();
-                                controls[i-1][j-1] = new Button();
-                                controls[i-1][j+1] = new Button();
-                                controls[i+1][j-1] = new Button();
+                                setNextButton(i, j);
                             }
                         }catch(ArrayIndexOutOfBoundsException e){
                             
