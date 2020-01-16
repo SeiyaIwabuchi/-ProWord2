@@ -82,14 +82,18 @@ public class Sample1 extends Application {
         return new int[1];
     }
 
-    public void setNextButton(int i,int j){
-        for (int i_ = i-1; i_ <= i+1; i_++) {
-            for (int j_ = j-1; j_ <=j+1 ; j_++) {
-                if(i_!=i && j_!=j){
-                    if(controls[i_][j_] instanceof Label){
+    public void setNextButton(){
+        for(int i_=0;i_<controls.length;i_++){ //列
+            for(int j_=0;j_<controls.length;j_++){ //行
+                if(j_ != Rows-1){ //最終行より上
+                    if(controls[i_][j_+1] instanceof Label){ //一個下がLabelの時
+                        Label tmplb = (Label)controls[i_][j_+1];
                         Label tmplb2 = (Label)controls[i_][j_];
-                        if(tmplb2.getText() != "   ●   " && tmplb2.getText() != "   〇   "){
-                            controls[i_][j_] = new Button(Integer.toString(i) + Integer.toString(j));
+                        if((tmplb.getText() == "   ●   " || tmplb.getText() == "   〇   ") && (tmplb2.getText() != "   ●   " && tmplb2.getText() != "   〇   ")){ //一個下のラベルの内容が〇または●のとき。
+                            Button tmpbtn = new Button(Integer.toString(i_) + Integer.toString(j_));
+                            tmpbtn.setOnAction(new cellClickedEventHandler());
+                            controls[i_][j_] = tmpbtn;
+                            
                         }
                     }
                 }
@@ -122,6 +126,13 @@ public class Sample1 extends Application {
         stage.setTitle("Sample");
         stage.show();
     }
+    public void judge(){
+        for (int i = 0; i <controls.length ; i++) {
+            for (int j = 0; j <controls[i].length ; j++) {
+                
+            }
+        }
+    }
     class cellClickedEventHandler implements EventHandler<ActionEvent>{
 
         @Override
@@ -138,24 +149,10 @@ public class Sample1 extends Application {
             player = !player;
             controls[contIndex[0]][contIndex[1]] = new Label(mark);
             controls[contIndex[0]][contIndex[1]].setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            removeButton();
-            for (int i = 0; i <controls.length ; i++) {
-                for (int j = 0; j <controls[i].length ; j++) {
-                    if(controls[i][j] != null && controls[i][j] instanceof Label){
-                        Label tmplb = (Label)controls[i][j];
-                        try{
-                            if(tmplb.getText() == "   ●   " && player){
-                                setNextButton(i, j);
-                            }else if(tmplb.getText() == "   〇   " && !player){
-                                setNextButton(i, j);
-                            }
-                        }catch(ArrayIndexOutOfBoundsException e){
-                            
-                        }
-                    }
-                }
-            }
-            refresh();
+            judge(); //勝敗判定する。
+            removeButton(); //一度全ボタン削除
+            setNextButton(); //次に置ける場所にボタンを配置する。
+            refresh(); //画面を再描画する。
         }
         
     }
