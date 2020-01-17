@@ -1,6 +1,9 @@
 package sample1;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /*
 四目並べ
@@ -12,6 +15,13 @@ import java.util.Arrays;
 先手後手それぞれで選択可能な要素を検索しそこにボタンを配置する。
 手番が変わったら、前の番手で表示されたボタンはラベルに置き換える。
 選択可能なセルにのみボタンは配置する。
+-----------------------------------
+対コンピュータ
+人はボタンをクリック
+コンピュータは
+1,選択可能なマスの一覧を取得する。
+    すべてのマスの中からButtonオブジェクトだけを抽出した配列を作る
+2,乱数を発生させ適当に選択させる。
 */
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -34,6 +44,8 @@ public class Sample1 extends Application {
     private Label blank = new Label("  "); //空白部分
     private boolean player = false; //先手か
     private Stage stage;
+    private Label gameInfoLabel = new Label("〇の番です。");
+    private cellClickedEventHandler comEventHandler = new cellClickedEventHandler();
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -61,7 +73,9 @@ public class Sample1 extends Application {
         }
         //GridPaneの作成
         GridPane pane = new GridPane();
- 
+        //BorderPaneの中にgridを入れる
+        BorderPane bpane = new BorderPane();
+        //gridPaneに要素を追加する。
         for (int i = 0; i <controls.length ; i++) {
             for (int j = 0; j <controls[i].length ; j++) {
                 if(controls[i][j] != null){
@@ -69,7 +83,9 @@ public class Sample1 extends Application {
                 }
             }
         }
-        Scene scene = new Scene(pane, 300, 250);
+        bpane.setCenter(pane); //boederPaneにgridPaneを追加
+        bpane.setBottom(gameInfoLabel);
+        Scene scene = new Scene(bpane, 300, 250);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Sample");
         primaryStage.show();
@@ -119,6 +135,7 @@ public class Sample1 extends Application {
     }
     public void refresh(){
         GridPane pane = new GridPane();
+        BorderPane bpane = new BorderPane();
         for (int i = 0; i <controls.length ; i++) {
             for (int j = 0; j <controls[i].length ; j++) {
                 if(controls[i][j] != null){
@@ -126,7 +143,9 @@ public class Sample1 extends Application {
                 }
             }
         }
-        Scene scene = new Scene(pane, 300, 250);
+        bpane.setCenter(pane);
+        bpane.setBottom(gameInfoLabel);
+        Scene scene = new Scene(bpane, 300, 250);
         stage.setScene(scene);
         stage.setTitle("Sample");
         stage.show();
@@ -204,12 +223,32 @@ public class Sample1 extends Application {
         }
         return judgeState.none;
     }
+    void doComputer(){
+        //選択可能なマスを選択する。
+        List<Button> selectableButtons = new ArrayList<Button>();
+        for(Control[] cont1 : controls){
+            for(Control cont2: cont1){
+                if(cont2 instanceof Button){
+                    selectableButtons.add((Button)cont2);
+                }
+            }
+        }
+        Random random = new Random();
+        comEventHandler.handle(selectableButtons.get(random.nextInt(selectableButtons.size())));
+    }
     class cellClickedEventHandler implements EventHandler<ActionEvent>{
 
         @Override
         public void handle(ActionEvent arg) {
             Button clickedButton = (Button)arg.getSource();
             int[] contIndex = getButtonIndex(clickedButton);
+            this.common(contIndex);
+        }
+        public void handle(Button bt){
+            int[] contIndex = getButtonIndex(bt);
+            this.common(contIndex);
+        }
+        public void common(int[] contIndex){
             System.out.println(Integer.toString(contIndex[0]) + Integer.toString(contIndex[1]));
             String mark;
             if(player){
@@ -219,6 +258,7 @@ public class Sample1 extends Application {
             }
             controls[contIndex[0]][contIndex[1]] = new Label(mark);
             controls[contIndex[0]][contIndex[1]].setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            gameInfoLabel.setText((player?"〇":"●") + "の番です。");
             removeButton(); //一度全ボタン削除
             setNextButton(); //次に置ける場所にボタンを配置する。
             refresh(); //画面を再描画する。
@@ -230,8 +270,10 @@ public class Sample1 extends Application {
                 Platform.exit();
             }
             player = !player;
+            if(!player){
+                doComputer();
+            }
         }
-        
     }
     public static void main(String[] args){
         launch(args);
