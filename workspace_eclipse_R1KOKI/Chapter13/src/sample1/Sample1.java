@@ -1,5 +1,7 @@
 package sample1;
 
+import java.util.Arrays;
+
 /*
 四目並べ
 グリッドレイアウトを使う
@@ -12,13 +14,16 @@ package sample1;
 選択可能なセルにのみボタンは配置する。
 */
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -27,7 +32,7 @@ public class Sample1 extends Application {
     private int Rows=8,Columns=8; //行列の数
     private Control[][] controls = new Control[Rows][Columns]; //コントロールを格納しておく配列
     private Label blank = new Label("  "); //空白部分
-    private boolean player = false; //先手後手番どちらか
+    private boolean player = false; //先手か
     private Stage stage;
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -126,12 +131,78 @@ public class Sample1 extends Application {
         stage.setTitle("Sample");
         stage.show();
     }
-    public void judge(){
+    int[] downDim(int[][] highDimArray,int row,int col,int direction){
+        int lowDimArray[] = {-100,-100,-100,-100};
+        for(int i=0;i<4;i++){
+            if(direction == 0 && col+i < highDimArray[row].length){ //縦
+                lowDimArray[i] = highDimArray[row][col+i];
+            }else if(direction == 1 && row+i < highDimArray.length){ //横
+                lowDimArray[i] = highDimArray[row+i][col];
+            }else if(direction == 2 && row+i < highDimArray.length && col+i < highDimArray[row].length){ //右斜め
+                lowDimArray[i] = highDimArray[row+i][col+i];
+            }else if(direction == 3 && row+3 < highDimArray.length && col+i < highDimArray[row].length){ //左斜め
+                lowDimArray[i] = highDimArray[row-i+3][col+i];
+            }
+            System.out.print(lowDimArray[i] + "\t");
+        }
+        System.out.println();
+        return lowDimArray;
+    }
+    public String judge(){
+        //いったん別の配列に置き換える。
+        //-1,0,1だけの配列
+        int[][] table = new int[controls[0].length][controls.length];
+        int mark;
         for (int i = 0; i <controls.length ; i++) {
             for (int j = 0; j <controls[i].length ; j++) {
-                
+                if(controls[i][j] instanceof Button){ //ボタンは未選択状態
+                    table[j][i] = 0;
+                }else if(controls[i][j] instanceof Label){
+                    Label tmplb = (Label)controls[i][j];
+                    if(tmplb.getText() == "   ●   "){
+                        table[j][i] = 1;
+                    }else if(tmplb.getText() == "   〇   "){
+                        table[j][i] = -1;
+                    }else{
+                        table[j][i] = 0;
+                    }
+                }
+                System.out.print(Integer.toString(table[i][j]) + "\t");
+            }
+            System.out.println();
+        }
+        if(player){
+            mark = 1;
+        }else{
+            mark = -1;
+        }
+        for (int i = 0; i <controls.length ; i++) {
+            for (int j = 0; j <controls[i].length ; j++) {
+                /*
+                 -3|@ - - @ - - @
+                 -2|- @ - @ - @ -
+                 -1|- - @ @ @ - -
+                 0 |@ @ @ @ @ @ @
+                 1 |- - @ @ @ - -
+                 2 |- @ - @ - @ -
+                 3 |@ - - @ - - @
+                -----------------
+                    -3-2-10 1 2 3
+                */
+                if(table[i][j] != mark){
+                    continue;
+                }else if(Math.abs(Arrays.stream(downDim(table, i, j, 0)).sum()) == 4){ //縦の判定
+                    return judgeState.decided;
+                }else if(Math.abs(Arrays.stream(downDim(table, i, j, 1)).sum()) == 4){ //横の判定
+                    return judgeState.decided;
+                }else if(Math.abs(Arrays.stream(downDim(table, i, j, 2)).sum()) == 4){ //右斜めの判定
+                    return judgeState.decided;
+                }else if(Math.abs(Arrays.stream(downDim(table, i, j, 3)).sum()) == 4){ //左斜めの判定
+                    return judgeState.decided;
+                }
             }
         }
+        return judgeState.none;
     }
     class cellClickedEventHandler implements EventHandler<ActionEvent>{
 
@@ -146,17 +217,26 @@ public class Sample1 extends Application {
             }else{
                 mark = "   〇   ";
             }
-            player = !player;
             controls[contIndex[0]][contIndex[1]] = new Label(mark);
             controls[contIndex[0]][contIndex[1]].setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            judge(); //勝敗判定する。
             removeButton(); //一度全ボタン削除
             setNextButton(); //次に置ける場所にボタンを配置する。
             refresh(); //画面を再描画する。
+            if(judge() == judgeState.decided){  //勝敗判定する。
+                Alert dialog = new Alert(AlertType.INFORMATION);
+                dialog.setHeaderText(null);
+                dialog.setContentText(mark + "の勝ちです。");
+                dialog.showAndWait();
+                Platform.exit();
+            }
+            player = !player;
         }
         
     }
     public static void main(String[] args){
         launch(args);
     }
+}
+class judgeState{
+    public static String none = "none",decided="decided";
 }
