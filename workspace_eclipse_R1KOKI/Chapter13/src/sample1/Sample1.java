@@ -1,6 +1,14 @@
 package sample1;
 
+import java.io.IOException;
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /*
 四目並べ
@@ -23,12 +31,17 @@ import java.util.*;
 100,先手後手を選べる
     単独の4目リーチを止められる
 120,星先生と対戦して20手以上続けられる。
+pythonとの並列実行
+javaの方でスタートと同時にpythonを実行(並列処理)
+起動時の引数として先手後手の情報を与える
+python側のインターフェース
+入力:プレイヤーが選択した目
+出力:コンピュータ側の選択した目
 */
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -46,11 +59,12 @@ public class Sample1 extends Application {
     private int Rows=8,Columns=8; //行列の数
     private Control[][] controls = new Control[Rows][Columns]; //コントロールを格納しておく配列
     private Label blank = new Label("  "); //空白部分
-    private boolean player = true; //先手か
+    private static boolean player = true; //先手か
     private Stage gameStage;
     private Label gameInfoLabel = new Label("〇の番です。");
     private cellClickedEventHandler comEventHandler = new cellClickedEventHandler();
-    private List<int[]> reachIndexs;
+    static PrintWriter writer;
+    static BufferedReader reader;
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameStage = primaryStage;
@@ -271,25 +285,6 @@ public class Sample1 extends Application {
                     return judgeState.decided;
                 }else if(Math.abs(Arrays.stream(downDim(table, i, j, 3)).sum()) == 4){ //左斜めの判定
                     return judgeState.decided;
-                }else{
-                    //リーチ判定
-                    if(Math.abs(Arrays.stream(downDim(table, i, j, 0)).sum()) == 3){ //縦の判定
-                        int row = indexOf(downDim(table, i, j, 0), -100) + i;
-                    }else if(Math.abs(Arrays.stream(downDim(table, i, j, 1)).sum()) == 3){ //横の判定
-                        int col = indexOf(downDim(table, i, j, 1), -100) + j;
-                        reachIndex[0] = i;
-                        reachIndex[1] = col;
-                    }else if(Math.abs(Arrays.stream(downDim(table, i, j, 2)).sum()) == 3){ //右斜めの判定
-                        int col = indexOf(downDim(table, i, j, 2), -100) + j;
-                        int row = indexOf(downDim(table, i, j, 2), -100) + i;
-                        reachIndex[0] = row;
-                        reachIndex[1] = col;
-                    }else if(Math.abs(Arrays.stream(downDim(table, i, j, 3)).sum()) == 3){ //左斜めの判定
-                        int row = 3- indexOf(downDim(table, i, j, 3), -100) + i;
-                        int col = indexOf(downDim(table, i, j, 3), -100) + j;
-                        reachIndex[0] = row;
-                        reachIndex[1] = col;
-                    }
                 }
             }
         }
@@ -348,9 +343,97 @@ public class Sample1 extends Application {
         }
     }
     public static void main(String[] args){
+        AIProcess ai = new AIProcess(player);
+        AIserver aiserver = new AIserver();
+        aiserver.writer = writer;
+        aiserver.reader = reader;
+        aiserver.start();
+        //ai.start();
         launch(args);
     }
 }
 class judgeState{
     public static String none = "none",decided="decided";
+}
+class AIProcess extends Thread{
+    String[] com = {"python",".\\connect_for\\main.py","1"};
+    private boolean player = true;
+    Process proc;
+    public AIProcess(boolean player){
+        this.player = player;
+        if(this.player){
+            com[2] = "0";
+        }
+    }
+    public void run(){
+        try{
+            proc = Runtime.getRuntime().exec(com);
+        }catch(Exception e){
+            System.out.println("AI起動失敗");
+            e.printStackTrace();
+        }finally{
+            System.out.println("AI中断");
+            try{
+                System.out.println(proc.waitFor());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            proc.destroy();
+        }
+    }
+}
+class AIserver extends Thread{
+    PrintWriter writer;
+    BufferedReader reader;
+    public void run(){
+        //ソケットサーバーの起動
+        ServerSocket sSocket = null;
+        Socket socket = null;
+        reader = null;
+        writer = null;
+        try{
+            //IPアドレスとポート番号を指定してサーバー側のソケットを作成
+            sSocket = new ServerSocket();
+            sSocket.bind(new InetSocketAddress("127.0.0.1",8765));
+        
+            System.out.println("クライアントからの入力待ち状態");
+            
+            //クライアントからの要求を待ち続けます
+            socket = sSocket.accept();
+            
+            //クライアントからの受取用
+            reader = new BufferedReader(
+                    new InputStreamReader
+                    (socket.getInputStream()));
+            
+            //サーバーからクライアントへの送信用
+            writer = new PrintWriter(
+                    socket.getOutputStream(), true);
+            
+            //無限ループ　byeの入力でループを抜ける
+            String line = null;
+            int num;
+            while (true) {
+                
+                line = reader.readLine();
+                if(line != null){
+                    if (line.equals("bye")) {
+                        break;
+                    }
+                    if(line.equals("test")){
+                        System.out.println("AIクライアントからの応答を確認");
+                        writer.println("OK");
+                        writer.println("OK");
+                        writer.println("OK");
+                        writer.println("OK");
+                        writer.println("OK");
+                        break;
+                    }
+                    System.out.println("クライアントで入力された文字＝" + line);
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
