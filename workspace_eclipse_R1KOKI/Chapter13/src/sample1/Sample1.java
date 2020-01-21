@@ -1,9 +1,6 @@
 package sample1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /*
 四目並べ
@@ -22,6 +19,10 @@ import java.util.Random;
 1,選択可能なマスの一覧を取得する。
     すべてのマスの中からButtonオブジェクトだけを抽出した配列を作る
 2,乱数を発生させ適当に選択させる。
+課題評価基準
+100,先手後手を選べる
+    単独の4目リーチを止められる
+120,星先生と対戦して20手以上続けられる。
 */
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -49,6 +50,7 @@ public class Sample1 extends Application {
     private Stage gameStage;
     private Label gameInfoLabel = new Label("〇の番です。");
     private cellClickedEventHandler comEventHandler = new cellClickedEventHandler();
+    private List<int[]> reachIndexs;
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameStage = primaryStage;
@@ -210,6 +212,14 @@ public class Sample1 extends Application {
         System.out.println();
         return lowDimArray;
     }
+    public int indexOf(int[] ar,int e){
+        for(int i=0;i<ar.length;i++){
+            if(ar[i] == e){
+                return i;
+            }
+        }
+        return -1;
+    }
     public String judge(){
         //いったん別の配列に置き換える。
         //-1,0,1だけの配列
@@ -261,6 +271,25 @@ public class Sample1 extends Application {
                     return judgeState.decided;
                 }else if(Math.abs(Arrays.stream(downDim(table, i, j, 3)).sum()) == 4){ //左斜めの判定
                     return judgeState.decided;
+                }else{
+                    //リーチ判定
+                    if(Math.abs(Arrays.stream(downDim(table, i, j, 0)).sum()) == 3){ //縦の判定
+                        int row = indexOf(downDim(table, i, j, 0), -100) + i;
+                    }else if(Math.abs(Arrays.stream(downDim(table, i, j, 1)).sum()) == 3){ //横の判定
+                        int col = indexOf(downDim(table, i, j, 1), -100) + j;
+                        reachIndex[0] = i;
+                        reachIndex[1] = col;
+                    }else if(Math.abs(Arrays.stream(downDim(table, i, j, 2)).sum()) == 3){ //右斜めの判定
+                        int col = indexOf(downDim(table, i, j, 2), -100) + j;
+                        int row = indexOf(downDim(table, i, j, 2), -100) + i;
+                        reachIndex[0] = row;
+                        reachIndex[1] = col;
+                    }else if(Math.abs(Arrays.stream(downDim(table, i, j, 3)).sum()) == 3){ //左斜めの判定
+                        int row = 3- indexOf(downDim(table, i, j, 3), -100) + i;
+                        int col = indexOf(downDim(table, i, j, 3), -100) + j;
+                        reachIndex[0] = row;
+                        reachIndex[1] = col;
+                    }
                 }
             }
         }
