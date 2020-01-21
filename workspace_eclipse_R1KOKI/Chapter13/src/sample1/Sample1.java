@@ -28,11 +28,14 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -42,13 +45,14 @@ public class Sample1 extends Application {
     private int Rows=8,Columns=8; //行列の数
     private Control[][] controls = new Control[Rows][Columns]; //コントロールを格納しておく配列
     private Label blank = new Label("  "); //空白部分
-    private boolean player = false; //先手か
-    private Stage stage;
+    private boolean player = true; //先手か
+    private Stage gameStage;
     private Label gameInfoLabel = new Label("〇の番です。");
     private cellClickedEventHandler comEventHandler = new cellClickedEventHandler();
     @Override
     public void start(Stage primaryStage) throws Exception {
-        stage = primaryStage;
+        gameStage = primaryStage;
+        showStartMenu();
         //コントロールの作成
         //一番下(Rows-1)以外はすべてblankを配置する。
         for (int i = 0; i <controls.length ; i++) {
@@ -88,7 +92,46 @@ public class Sample1 extends Application {
         Scene scene = new Scene(bpane, 300, 250);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Sample");
-        primaryStage.show();
+    }
+    public void showStartMenu(){
+        //スタートメニューを表示する
+        /*
+        先手か後手かの選択（ラジオボタンで行う）
+        スタートボタン()
+        BorderPaneのCenterにGridPaneを配置する。bottomにスタートボタンを配置する。
+        */
+        Stage startMenuStage = new Stage();
+        BorderPane startMenuBorderPane = new BorderPane();
+        GridPane startMenuGridPane = new GridPane();
+        ToggleGroup turnToggle = new ToggleGroup();
+        RadioButton selectTrunRadioButtons[] = {new RadioButton("先手 "),new RadioButton("後手")};
+        selectTrunRadioButtons[0].setSelected(true);
+        selectTrunRadioButtons[0].setToggleGroup(turnToggle);
+        selectTrunRadioButtons[1].setToggleGroup(turnToggle);
+        Button startButton = new Button("スタート");
+        Scene startMenuScene;
+        startButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent arg0) {
+                if(selectTrunRadioButtons[0].isSelected()){
+
+                }else{
+                    player = false;
+                    doComputer();
+                }
+				gameStage.show();
+			}
+        });
+        startMenuGridPane.add(new Label("手番 : "),0,0);
+        startMenuGridPane.add(selectTrunRadioButtons[0],1,0);
+        startMenuGridPane.add(selectTrunRadioButtons[1],2,0);
+        startMenuBorderPane.setCenter(startMenuGridPane);
+        BorderPane.setAlignment(startButton, Pos.CENTER);
+        startMenuBorderPane.setBottom(startButton);
+        startMenuScene = new Scene(startMenuBorderPane,300,250);
+        startMenuStage.setScene(startMenuScene);
+        startMenuStage.setTitle("スタートメニュー");
+        startMenuStage.show();
     }
     public int[] getButtonIndex(Button clickedButton){
         for (int i = 0; i <controls.length ; i++) {
@@ -146,9 +189,9 @@ public class Sample1 extends Application {
         bpane.setCenter(pane);
         bpane.setBottom(gameInfoLabel);
         Scene scene = new Scene(bpane, 300, 250);
-        stage.setScene(scene);
-        stage.setTitle("Sample");
-        stage.show();
+        gameStage.setScene(scene);
+        gameStage.setTitle("Sample");
+        gameStage.show();
     }
     int[] downDim(int[][] highDimArray,int row,int col,int direction){
         int lowDimArray[] = {-100,-100,-100,-100};
