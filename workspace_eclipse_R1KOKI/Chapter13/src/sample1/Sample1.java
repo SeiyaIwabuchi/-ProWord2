@@ -313,6 +313,11 @@ public class Sample1 extends Application {
         comEventHandler.handle(selectableButtons.get(random.nextInt(selectableButtons.size())));
         */
         int recivePos = -1;
+        Alert dialog;
+        dialog = new Alert(AlertType.INFORMATION);
+        dialog.setHeaderText("AI処理中");
+        dialog.setContentText("AI処理中");
+        dialog.show();
         while(true){
             System.out.println("クライアント待ち");
             try{
@@ -326,6 +331,7 @@ public class Sample1 extends Application {
                 e.printStackTrace();
             }
         }
+        dialog.close();
         System.out.println("クライアント応答:" + recivePos);
         //recivePos -= 1;
         int index[] = {recivePos%8,recivePos/8};
@@ -357,7 +363,7 @@ public class Sample1 extends Application {
             }
             controls[contIndex[0]][contIndex[1]] = new Label(mark);
             controls[contIndex[0]][contIndex[1]].setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            gameInfoLabel.setText((player?"〇":"●") + "の番です。");
+            gameInfoLabel.setText((player?"〇":"●(あなた)") + "の番です。");
             removeButton(); //一度全ボタン削除
             setNextButton(); //次に置ける場所にボタンを配置する。
             refresh(); //画面を再描画する。

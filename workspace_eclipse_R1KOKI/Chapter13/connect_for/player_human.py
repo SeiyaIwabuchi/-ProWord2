@@ -21,14 +21,14 @@ class PlayerHuman:
                     valid=True
                     return act-1
                 else:
-                    #print ("That is not a valid move! Please try again.")
+                    print ("That is not a valid move! Please try again.")
                     print(-1)
             except Exception as e:
-                    #print (act +  "is not a valid move! Please try again.")
+                    print (act +  "is not a valid move! Please try again.")
                     print(-1)
         return act
 
     def getGameResult(self,board):
         if board.winner is not None and board.winner!=self.myturn and board.winner!=DRAW:
-            #print("I lost...")
+            print("I lost...")
             pass

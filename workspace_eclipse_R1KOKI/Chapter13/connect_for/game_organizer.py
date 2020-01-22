@@ -58,7 +58,7 @@ class GameOrganizer:
             self.nplayed += 1
             if self.nplayed%self.stat==0 or self.nplayed==self.nplay:
                 pass
-                #print(self.player_x.name+":"+str(self.nwon[self.player_x.myturn])+","+self.player_o.name+":"+str(self.nwon[self.player_o.myturn]) +",DRAW:"+str(self.nwon[DRAW]))
+                print(self.player_x.name+":"+str(self.nwon[self.player_x.myturn])+","+self.player_o.name+":"+str(self.nwon[self.player_o.myturn]) +",DRAW:"+str(self.nwon[DRAW]))
 
 
     def switch_player(self):
