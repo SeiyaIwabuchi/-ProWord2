@@ -3,8 +3,10 @@ package sample1;
 import java.io.IOException;
 import java.util.*;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -65,6 +67,8 @@ public class Sample1 extends Application {
     private cellClickedEventHandler comEventHandler = new cellClickedEventHandler();
     static PrintWriter writer;
     static BufferedReader reader;
+    AIProcess ai = new AIProcess(player);
+    AIserver aiserver = new AIserver();
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameStage = primaryStage;
@@ -129,6 +133,10 @@ public class Sample1 extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent arg0) {
+                aiserver.writer = writer;
+                aiserver.reader = reader;
+                aiserver.start();
+                //ai.start();
                 if(selectTrunRadioButtons[0].isSelected()){
 
                 }else{
@@ -292,6 +300,7 @@ public class Sample1 extends Application {
     }
     void doComputer(){
         //選択可能なマスを選択する。
+        /*ランダムに選択する
         List<Button> selectableButtons = new ArrayList<Button>();
         for(Control[] cont1 : controls){
             for(Control cont2: cont1){
@@ -302,6 +311,18 @@ public class Sample1 extends Application {
         }
         Random random = new Random();
         comEventHandler.handle(selectableButtons.get(random.nextInt(selectableButtons.size())));
+        */
+        int recivePos = -1;
+        try{
+            recivePos = Integer.parseInt(aiserver.reader.readLine());
+        }catch(IOException e){
+            e.printStackTrace();
+        }catch(NumberFormatException e){
+            e.printStackTrace();
+        }
+        recivePos -= 1;
+        int index[] = {recivePos/8,recivePos%8};
+        comEventHandler.common(index);
     }
     class cellClickedEventHandler implements EventHandler<ActionEvent>{
 
@@ -309,6 +330,9 @@ public class Sample1 extends Application {
         public void handle(ActionEvent arg) {
             Button clickedButton = (Button)arg.getSource();
             int[] contIndex = getButtonIndex(clickedButton);
+            System.out.println("send:" + (contIndex[0]+1)*(contIndex[1]+1));
+            //aiserver.writer.println((contIndex[0]+1)*(contIndex[1]+1));
+            //aiserver.writer.flush();
             this.common(contIndex);
         }
         public void handle(Button bt){
@@ -343,12 +367,6 @@ public class Sample1 extends Application {
         }
     }
     public static void main(String[] args){
-        AIProcess ai = new AIProcess(player);
-        AIserver aiserver = new AIserver();
-        aiserver.writer = writer;
-        aiserver.reader = reader;
-        aiserver.start();
-        //ai.start();
         launch(args);
     }
 }
@@ -396,40 +414,33 @@ class AIserver extends Thread{
             sSocket = new ServerSocket();
             sSocket.bind(new InetSocketAddress("127.0.0.1",8765));
         
-            System.out.println("クライアントからの入力待ち状態");
-            
-            //クライアントからの要求を待ち続けます
             socket = sSocket.accept();
-            
+            System.out.println("クライアント接続");
             //クライアントからの受取用
-            reader = new BufferedReader(
-                    new InputStreamReader
-                    (socket.getInputStream()));
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             
             //サーバーからクライアントへの送信用
-            writer = new PrintWriter(
-                    socket.getOutputStream(), true);
-            
+            writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
+
             //無限ループ　byeの入力でループを抜ける
-            String line = null;
-            int num;
+            String line = "";
+            int num=0;
             while (true) {
-                
-                line = reader.readLine();
-                if(line != null){
-                    if (line.equals("bye")) {
-                        break;
+                try{
+                    line = reader.readLine(); //入力待ち
+                    if(!line.equals("")){
+                        if(line.equals("test")){
+                            System.out.println(line);
+                            System.out.println("AIクライアントからの応答を確認");
+                            writer.println("OK");
+                            writer.flush();
+                            break;
+                        }
                     }
-                    if(line.equals("test")){
-                        System.out.println("AIクライアントからの応答を確認");
-                        writer.println("OK");
-                        writer.println("OK");
-                        writer.println("OK");
-                        writer.println("OK");
-                        writer.println("OK");
-                        break;
-                    }
-                    System.out.println("クライアントで入力された文字＝" + line);
+                }catch(IOException e){
+                    e.printStackTrace();
+                }finally{
+                    System.out.println(line);
                 }
             }
         }catch(Exception e){

@@ -2,15 +2,17 @@ from board import DRAW
 from board import ALL_POS_COUNT
 
 class PlayerHuman:
-    def __init__(self,turn):
+    def __init__(self,turn,soc):
         self.name="Human"
         self.myturn=turn
+        self.soc = soc
 
     def act(self,board):
         valid = False
         while not valid:
             try:
-                act = input()
+                #act = input()
+                act = self.soc.recv(1024).decode()
                 act = int(act)
                 #if act >= 1 and act <= 9 and board.board[act-1]==EMPTY:
                 if act >= 1 and act <= ALL_POS_COUNT:

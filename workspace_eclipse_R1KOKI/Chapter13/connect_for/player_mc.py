@@ -3,9 +3,10 @@ from board import DRAW
 import socket
 
 class PlayerMC:
-    def __init__(self, turn, name="MC"):
+    def __init__(self, turn, soc, name="MC"):
         self.name = name
         self.myturn = turn
+        self.soc = soc
 
     def getGameResult(self,winner):
         pass
