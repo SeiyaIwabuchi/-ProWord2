@@ -60,5 +60,6 @@ class PlayerMC:
         for act, v in scores.items():
             if v == max_score:
                 #print(str(act)+"="+str(v))
-                print(act)
+                print("サーバーへ送信:" + str(act))
+                self.soc.sendall((str(act)+"\n").encode())
                 return act

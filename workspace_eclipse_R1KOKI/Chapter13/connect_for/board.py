@@ -46,7 +46,7 @@ class Board:
             if i != ROW_NUM - 1:
                 matrix_str += hr
 
-        #print(matrix_str.format(*tempboard))
+        print(matrix_str.format(*tempboard))
 
 
     def check_winner(self, pos):

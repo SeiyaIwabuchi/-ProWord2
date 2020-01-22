@@ -35,7 +35,7 @@ def human_vs_alpha_random():
 
 def human_vs_mc(firstTurn,soc):
     p1 = PlayerHuman(PLAYER_X,soc)
-    p2 = PlayerMC(PLAYER_O, 'M2',soc)
+    p2 = PlayerMC(PLAYER_O,soc, 'M2')
     game = GameOrganizer(p1, p2, True,True,firstTurn=int(firstTurn))
     game.progress()
 

@@ -12,7 +12,9 @@ class PlayerHuman:
         while not valid:
             try:
                 #act = input()
+                print("サーバー応答待ち")
                 act = self.soc.recv(1024).decode()
+                print("サーバー返答:" + act)
                 act = int(act)
                 #if act >= 1 and act <= 9 and board.board[act-1]==EMPTY:
                 if act >= 1 and act <= ALL_POS_COUNT:

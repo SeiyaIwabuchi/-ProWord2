@@ -313,15 +313,22 @@ public class Sample1 extends Application {
         comEventHandler.handle(selectableButtons.get(random.nextInt(selectableButtons.size())));
         */
         int recivePos = -1;
-        try{
-            recivePos = Integer.parseInt(aiserver.reader.readLine());
-        }catch(IOException e){
-            e.printStackTrace();
-        }catch(NumberFormatException e){
-            e.printStackTrace();
+        while(true){
+            System.out.println("クライアント待ち");
+            try{
+                recivePos = Integer.parseInt(aiserver.reader.readLine());
+                break;
+            }catch(IOException e){
+                e.printStackTrace();
+            }catch(NumberFormatException e){
+                e.printStackTrace();
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
         }
-        recivePos -= 1;
-        int index[] = {recivePos/8,recivePos%8};
+        System.out.println("クライアント応答:" + recivePos);
+        //recivePos -= 1;
+        int index[] = {recivePos%8,recivePos/8};
         comEventHandler.common(index);
     }
     class cellClickedEventHandler implements EventHandler<ActionEvent>{
@@ -330,9 +337,10 @@ public class Sample1 extends Application {
         public void handle(ActionEvent arg) {
             Button clickedButton = (Button)arg.getSource();
             int[] contIndex = getButtonIndex(clickedButton);
-            System.out.println("send:" + (contIndex[0]+1)*(contIndex[1]+1));
-            //aiserver.writer.println((contIndex[0]+1)*(contIndex[1]+1));
-            //aiserver.writer.flush();
+            System.out.println("humanSelect:" + contIndex[0] + contIndex[1]);
+            System.out.println("send:" + ( (contIndex[1]*8) + contIndex[0] + 1));
+            aiserver.writer.println(( (contIndex[1]*8) + contIndex[0] + 1));
+            aiserver.writer.flush();
             this.common(contIndex);
         }
         public void handle(Button bt){
