@@ -346,6 +346,7 @@ public class Sample1 extends Application {
             dialog.setContentText("AI応答:" + recivePos);
             dialog.showAndWait();
             Platform.exit();
+            System.exit(-1);
         }
         int index[] = {recivePos%8,recivePos/8};
         comEventHandler.common(index);
