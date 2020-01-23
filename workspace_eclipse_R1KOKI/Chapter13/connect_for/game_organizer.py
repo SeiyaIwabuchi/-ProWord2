@@ -7,7 +7,7 @@ class GameOrganizer:
     winner=None
     human=0
     
-    def __init__(self, px, po, nplay=1, showBoard=True, showResult=True, stat=100,firstTurn=human):
+    def __init__(self, px, po, nplay=1, showBoard=True, showResult=True, stat=100,firstTurn=human,soc=None):
         self.player_x=px
         self.player_o=po
         self.nwon={px.myturn:0,po.myturn:0,DRAW:0}
@@ -19,6 +19,7 @@ class GameOrganizer:
         self.player_turn=self.players[firstTurn]
         self.nplayed=0
         self.stat=stat
+        self.soc = soc
 
     def progress(self):
         while self.nplayed < self.nplay:
@@ -47,8 +48,9 @@ class GameOrganizer:
                         out = "Winner : " + self.player_turn.name
                         #if self.showResult: print(out)
                     else:
-                        #print ("Invalid Move!")
+                        print ("Invalid Move!")
                         print(-1)
+                        self.soc.sendall("-1\n".encode())
                     self.nwon[self.board.winner]+=1
                 else:
                     self.switch_player()

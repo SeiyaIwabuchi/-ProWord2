@@ -313,20 +313,28 @@ public class Sample1 extends Application {
         comEventHandler.handle(selectableButtons.get(random.nextInt(selectableButtons.size())));
         */
         int recivePos = -1;
+<<<<<<< Updated upstream
         Alert dialog;
         dialog = new Alert(AlertType.INFORMATION);
         dialog.setHeaderText("AI処理中");
         dialog.setContentText("AI処理中");
         dialog.show();
+=======
+        String reciveStr = null;
+>>>>>>> Stashed changes
         while(true){
             System.out.println("クライアント待ち");
             try{
-                recivePos = Integer.parseInt(aiserver.reader.readLine());
+                reciveStr = aiserver.reader.readLine();
+                recivePos = Integer.parseInt(reciveStr);
                 break;
             }catch(IOException e){
-                e.printStackTrace();
+                Alert dialog = new Alert(AlertType.ERROR);
+                dialog.setHeaderText("エラー");
+                dialog.setContentText("接続が失われました。");
+                dialog.showAndWait();
+                Platform.exit();
             }catch(NumberFormatException e){
-                e.printStackTrace();
             }catch(NullPointerException e){
                 e.printStackTrace();
             }
@@ -334,6 +342,13 @@ public class Sample1 extends Application {
         dialog.close();
         System.out.println("クライアント応答:" + recivePos);
         //recivePos -= 1;
+        if(recivePos == -1){
+            Alert dialog = new Alert(AlertType.ERROR);
+            dialog.setHeaderText("エラー");
+            dialog.setContentText("AI応答:" + recivePos);
+            dialog.showAndWait();
+            Platform.exit();
+        }
         int index[] = {recivePos%8,recivePos/8};
         comEventHandler.common(index);
     }

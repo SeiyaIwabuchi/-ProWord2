@@ -23,9 +23,11 @@ class PlayerHuman:
                 else:
                     print ("That is not a valid move! Please try again.")
                     print(-1)
+                    self.soc.sendall("-1\n".encode())
             except Exception as e:
                     print (act +  "is not a valid move! Please try again.")
                     print(-1)
+                    self.soc.sendall("-1\n".encode())
         return act
 
     def getGameResult(self,board):
