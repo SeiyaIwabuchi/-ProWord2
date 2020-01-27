@@ -11,7 +11,15 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+/*
+--module-path=/opt/javafx-sdk-11.0.2/lib
+--add-modules=javafx.controls
+--add-modules=javafx.swing
+--add-modules=javafx.base
+--add-modules=javafx.fxml
+--add-modules=javafx.media
+--add-modules=javafx.web
+ */
 /*
 四目並べ
 グリッドレイアウトを使う
@@ -67,7 +75,6 @@ public class Sample1 extends Application {
     private cellClickedEventHandler comEventHandler = new cellClickedEventHandler();
     static PrintWriter writer;
     static BufferedReader reader;
-    AIProcess ai = new AIProcess(player);
     AIserver aiserver = new AIserver();
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -109,7 +116,7 @@ public class Sample1 extends Application {
         }
         bpane.setCenter(pane); //boederPaneにgridPaneを追加
         bpane.setBottom(gameInfoLabel);
-        Scene scene = new Scene(bpane, 300, 250);
+        Scene scene = new Scene(bpane, 370, 250);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Sample");
     }
@@ -133,14 +140,20 @@ public class Sample1 extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent arg0) {
+                if(!selectTrunRadioButtons[0].isSelected()){
+                    player = false;
+                }
+                AIProcess ai = new AIProcess(player);
                 aiserver.writer = writer;
                 aiserver.reader = reader;
                 aiserver.start();
-                //ai.start();
-                if(selectTrunRadioButtons[0].isSelected()){
-
-                }else{
-                    player = false;
+                try{
+                    Thread.sleep(1000);
+                    ai.start();
+                    Thread.sleep(1000);
+                }catch(InterruptedException e){
+                }
+                if(!selectTrunRadioButtons[0].isSelected()){
                     doComputer();
                 }
 				gameStage.show();
@@ -212,7 +225,7 @@ public class Sample1 extends Application {
         }
         bpane.setCenter(pane);
         bpane.setBottom(gameInfoLabel);
-        Scene scene = new Scene(bpane, 300, 250);
+        Scene scene = new Scene(bpane, 370, 250);
         gameStage.setScene(scene);
         gameStage.setTitle("Sample");
         gameStage.show();
@@ -402,7 +415,7 @@ class judgeState{
     public static String none = "none",decided="decided";
 }
 class AIProcess extends Thread{
-    String[] com = {"python",".\\connect_for\\main.py","1"};
+    String[] com = {"python3","./connect_for/main.py","1"};
     private boolean player = true;
     Process proc;
     public AIProcess(boolean player){
@@ -413,17 +426,21 @@ class AIProcess extends Thread{
     }
     public void run(){
         try{
+            System.out.println("> " + String.join(" ", com));
             proc = Runtime.getRuntime().exec(com);
+            proc.waitFor();
+            System.out.println("AIexitcode:" + proc.exitValue());
+            BufferedReader br = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+            String line = "";
+            while(line != null){
+                line = br.readLine();
+                System.out.println(br.readLine());
+            }
         }catch(Exception e){
             System.out.println("AI起動失敗");
             e.printStackTrace();
         }finally{
             System.out.println("AI中断");
-            try{
-                System.out.println(proc.waitFor());
-            }catch(Exception e){
-                e.printStackTrace();
-            }
             proc.destroy();
         }
     }
