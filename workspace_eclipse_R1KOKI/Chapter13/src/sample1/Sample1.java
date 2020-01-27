@@ -423,6 +423,12 @@ class AIProcess extends Thread{
         if(this.player){
             com[2] = "0";
         }
+        if(System.getProperty("os.name").toLowerCase() == "windows"){
+            System.out.println("windowsで実行中");
+            com[0] = "./python/python.exe";
+        }else{
+            System.out.println("linuxで実行中");
+        }
     }
     public void run(){
         try{
