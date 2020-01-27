@@ -9,16 +9,14 @@
             "name": "CodeLens (Launch) - Test",
             "request": "launch",
             "mainClass": "test.Test",
-            "projectName": "Chapter13",
-            "vmArgs": "--module-path=/opt/javafx-sdk-11.0.2/lib --add-modules=javafx.controls --add-modules=javafx.swing --add-modules=javafx.base --add-modules=javafx.fxml --add-modules=javafx.media --add-modules=javafx.web"
+            "projectName": "Chapter13"
         },
         {
             "type": "java",
             "name": "CodeLens (Launch) - Sample1",
             "request": "launch",
             "mainClass": "sample1.Sample1",
-            "projectName": "Chapter13",
-            "vmArgs": "--module-path=/opt/javafx-sdk-11.0.2/lib --add-modules=javafx.controls --add-modules=javafx.swing --add-modules=javafx.base --add-modules=javafx.fxml --add-modules=javafx.media --add-modules=javafx.web"
+            "projectName": "Chapter13"
         }
     ]
 }
