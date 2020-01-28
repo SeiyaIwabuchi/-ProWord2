@@ -27,7 +27,7 @@ class GameOrganizer:
 
             while self.board.winner == None:
                 if self.disp:
-                    #print("Turn is " + self.player_turn.name)
+                    print("Turn is " + self.player_turn.name)
                     pass
 
                 act = self.player_turn.act(self.board)
@@ -42,11 +42,11 @@ class GameOrganizer:
                         i.getGameResult(self.board)
 
                     if self.board.winner == DRAW:
-                        #if self.showResult:print ("Draw Game")
+                        if self.showResult:print ("Draw Game")
                         pass
                     elif self.board.winner == self.player_turn.myturn:
                         out = "Winner : " + self.player_turn.name
-                        #if self.showResult: print(out)
+                        if self.showResult: print(out)
                     else:
                         print ("Invalid Move!")
                         print(-1)

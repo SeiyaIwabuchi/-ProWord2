@@ -50,16 +50,16 @@ class PlayerMC:
         for act in acts:
             scores[act] = 0
             for i in range(n):
-                #print("Try"+str(i))
+                print("Try"+str(i))
                 self.trial(scores, board, act)
 
-            #print(scores)
+            print(scores)
             scores[act]/=n
 
         max_score = max(scores.values())
         for act, v in scores.items():
             if v == max_score:
-                #print(str(act)+"="+str(v))
+                print(str(act)+"="+str(v))
                 print("サーバーへ送信:" + str(act))
                 self.soc.sendall((str(act)+"\n").encode())
                 return act

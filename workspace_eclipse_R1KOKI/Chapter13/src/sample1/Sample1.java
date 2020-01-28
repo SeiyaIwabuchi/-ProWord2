@@ -242,9 +242,9 @@ public class Sample1 extends Application {
             }else if(direction == 3 && row+3 < highDimArray.length && col+i < highDimArray[row].length){ //左斜め
                 lowDimArray[i] = highDimArray[row-i+3][col+i];
             }
-            System.out.print(lowDimArray[i] + "\t");
+            //System.out.print(lowDimArray[i] + "\t");
         }
-        System.out.println();
+        //System.out.println();
         return lowDimArray;
     }
     public int indexOf(int[] ar,int e){
@@ -274,9 +274,9 @@ public class Sample1 extends Application {
                         table[j][i] = 0;
                     }
                 }
-                System.out.print(Integer.toString(table[i][j]) + "\t");
+                //System.out.print(Integer.toString(table[i][j]) + "\t");
             }
-            System.out.println();
+            //System.out.println();
         }
         if(player){
             mark = 1;
