@@ -52,6 +52,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -210,6 +211,9 @@ public class Sample1 extends Application {
                         controls[i][j].setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                     }
                 }
+                if(controls[i][j] instanceof Label){
+                    controls[i][j].setBackground(new Background(new BackgroundFill(Color.rgb(255, 255, 255), CornerRadii.EMPTY, Insets.EMPTY)));
+                }
             }
         }
     }
@@ -232,19 +236,36 @@ public class Sample1 extends Application {
     }
     int[] downDim(int[][] highDimArray,int row,int col,int direction){
         int lowDimArray[] = {-100,-100,-100,-100};
+        String dictStr = "";
+        if(direction == 0){ //横
+            dictStr = "横　　";
+        }else if(direction == 1){ //縦
+            dictStr = "縦　　";
+        }else if(direction == 2){ //右斜め
+            dictStr = "右斜め";
+        }else if(direction == 3){ //左斜め
+            dictStr = "左斜め";
+        }
+        System.out.print("(" + row + "," + col + ")");
+        System.out.print(dictStr + ":");
         for(int i=0;i<4;i++){
-            if(direction == 0 && col+i < highDimArray[row].length){ //縦
+            //row+3 < highDimArray.length && col+i < highDimArray[row].length
+            if(direction == 3){
+                //System.out.println("(" + (row-i+3) +  "," + (col+i) + ")" + (row-i+3 < highDimArray.length));
+            }
+            if(direction == 0 && col+i < highDimArray[row].length){ //横
                 lowDimArray[i] = highDimArray[row][col+i];
-            }else if(direction == 1 && row+i < highDimArray.length){ //横
+            }else if(direction == 1 && row+i < highDimArray.length){ //縦
                 lowDimArray[i] = highDimArray[row+i][col];
             }else if(direction == 2 && row+i < highDimArray.length && col+i < highDimArray[row].length){ //右斜め
                 lowDimArray[i] = highDimArray[row+i][col+i];
-            }else if(direction == 3 && row+3 < highDimArray.length && col+i < highDimArray[row].length){ //左斜め
+            }else if(direction == 3 && row-i+3 < highDimArray.length && col+i < highDimArray[row].length){ //左斜め
                 lowDimArray[i] = highDimArray[row-i+3][col+i];
+                //System.out.print("(" + (row-i+3) + "," + (col+i) + ")");
             }
-            //System.out.print(lowDimArray[i] + "\t");
+            System.out.print(lowDimArray[i] + "\t");
         }
-        //System.out.println();
+        System.out.println();
         return lowDimArray;
     }
     public int indexOf(int[] ar,int e){
@@ -260,6 +281,7 @@ public class Sample1 extends Application {
         //-1,0,1だけの配列
         int[][] table = new int[controls[0].length][controls.length];
         int mark;
+        System.out.println("----------------置換後テーブル-------------------");
         for (int i = 0; i <controls.length ; i++) {
             for (int j = 0; j <controls[i].length ; j++) {
                 if(controls[i][j] instanceof Button){ //ボタンは未選択状態
@@ -274,15 +296,17 @@ public class Sample1 extends Application {
                         table[j][i] = 0;
                     }
                 }
-                //System.out.print(Integer.toString(table[i][j]) + "\t");
+                System.out.print(Integer.toString(table[i][j]) + "\t");
             }
-            //System.out.println();
+            System.out.println();
         }
+        System.out.println("---------------------------------------------------");
         if(player){
             mark = 1;
         }else{
             mark = -1;
         }
+        System.out.println("-------------------------------------------");
         for (int i = 0; i <controls.length ; i++) {
             for (int j = 0; j <controls[i].length ; j++) {
                 /*
@@ -296,9 +320,12 @@ public class Sample1 extends Application {
                 -----------------
                     -3-2-10 1 2 3
                 */
-                if(table[i][j] != mark){
-                    continue;
-                }else if(Math.abs(Arrays.stream(downDim(table, i, j, 0)).sum()) == 4){ //縦の判定
+                if(i+3 < controls.length){
+                    if(table[i][j] != mark && table[i+3][j] != mark){
+                        continue;
+                    }
+                }
+                if(Math.abs(Arrays.stream(downDim(table, i, j, 0)).sum()) == 4){ //縦の判定
                     return judgeState.decided;
                 }else if(Math.abs(Arrays.stream(downDim(table, i, j, 1)).sum()) == 4){ //横の判定
                     return judgeState.decided;
@@ -392,6 +419,7 @@ public class Sample1 extends Application {
             controls[contIndex[0]][contIndex[1]].setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             gameInfoLabel.setText((player?"〇":"●(あなた)") + "の番です。");
             removeButton(); //一度全ボタン削除
+            controls[contIndex[0]][contIndex[1]].setBackground(new Background(new BackgroundFill(Color.rgb(253, 191, 191), CornerRadii.EMPTY, Insets.EMPTY)));
             setNextButton(); //次に置ける場所にボタンを配置する。
             refresh(); //画面を再描画する。
             if(judge() == judgeState.decided){  //勝敗判定する。

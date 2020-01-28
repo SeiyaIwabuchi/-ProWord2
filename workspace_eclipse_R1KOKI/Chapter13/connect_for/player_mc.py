@@ -46,7 +46,7 @@ class PlayerMC:
     def act(self,board):
         acts = board.get_possible_pos()
         scores = {}
-        n = 50
+        n = 100
         for act in acts:
             scores[act] = 0
             for i in range(n):
