@@ -399,8 +399,17 @@ public class Sample1 extends Application {
             int[] contIndex = getButtonIndex(clickedButton);
             System.out.println("humanSelect:" + contIndex[0] + contIndex[1]);
             System.out.println("send:" + ( (contIndex[1]*8) + contIndex[0] + 1));
-            aiserver.writer.println(( (contIndex[1]*8) + contIndex[0] + 1));
-            aiserver.writer.flush();
+            try{
+                aiserver.writer.println(( (contIndex[1]*8) + contIndex[0] + 1));
+                aiserver.writer.flush();
+            }catch(NullPointerException e){
+                Alert al = new Alert(AlertType.ERROR);
+                al.setHeaderText("pythonスクリプト実行エラー");
+                al.setContentText("pythonスクリプト実行エラー");
+                al.showAndWait();
+                Platform.exit();
+                return;
+            }
             this.common(contIndex);
         }
         public void handle(Button bt){
@@ -459,6 +468,7 @@ class AIProcess extends Thread{
         }
     }
     public void run(){
+        String pythonOutMsg = "";
         try{
             System.out.println("> " + String.join(" ", com));
             proc = Runtime.getRuntime().exec(com);
@@ -468,6 +478,7 @@ class AIProcess extends Thread{
             String line = "";
             while(line != null){
                 line = br.readLine();
+                pythonOutMsg += line;
                 System.out.println(br.readLine());
             }
         }catch(Exception e){
